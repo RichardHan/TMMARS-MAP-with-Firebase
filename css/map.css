@@ -1,0 +1,80 @@
+html {overflow-x:hidden; overflow-y:hidden;background-color: #000000;}
+body {
+	overflow:hidden;
+    margin: 0;
+    padding: 0;
+    /*background-color: #404040;*/
+     /*background-color: #000005;*/
+}
+       
+#map {
+	position:relative;width:1000px; height:400px;overflow:hidden;
+	background-color: #000;
+	margin:auto;
+}
+
+#steering_wheel div {
+	border:#333 solid thin; width: 20px; height: 20px;
+	position:absolute;
+	text-align: center;
+	vertical-align: center;
+}
+
+#steering_wheel a:link {
+	color:#333;
+}
+
+#steering_wheel a:hover{
+	color:#333;
+}
+
+#steering_wheel a:visited{
+	color:#333;
+}
+
+#steering_wheel a:active{
+	color:#333;
+}
+
+#titleContainer{
+	margin-left: 0px;
+}
+.pie {
+	position: absolute;z-index: 100;
+    margin: 0 auto;
+    width: 400px;
+    height: 200px;
+}
+#marquee_box{
+	height: 16px; margin:0px;
+	position: absolute;width:1280px;
+	display: none;
+	overflow:hidden;
+}
+#marquee{
+	text-align:left;
+	background-color: #333;  position: relative;height:1em;overflow:hidden;width:99999px;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+#marquee span{
+	font-family:Arial;font-size:13px;color:#FFFFFF;
+}
+
+#dailyMars {
+	font-family:Arial;color:#FFFFFF;
+}
+.title{
+	font-size:27px;
+}
+#appNum{
+	font-size:48px;
+}
+#virusNum{
+	font-size:48px;
+}
+
+.clear {
+  clear: both;
+  }
