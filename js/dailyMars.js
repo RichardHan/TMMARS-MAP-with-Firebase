@@ -3,38 +3,59 @@ var globalDailyMars = [0, 0];
 var GetdataFromAPI_JSON;
 var _firstTime = true;
 
-function addCommas(str) {
+function AddCommas(str) {
     if (str.length <= 3) { return str; }
     var added = str.substr(str.length - 3);
     var remaining = str.substr(0, str.length - 3);
-    return addCommas(remaining) + ',' + added;
+    return AddCommas(remaining) + ',' + added;
 }
 
-function getCurrentNum() {
-    var url = "https://njdc.rest.mars.trendmicro.com/akamailog/daily-scanned-number?random=" + Math.random();
-    if (BrowserDetect.browser == "Explorer" && window.XDomainRequest) {
-        var xdr = new XDomainRequest();
-        xdr.onload = function () {
-            var data = $.parseJSON(xdr.responseText);
-            if (data == null || typeof (data) == 'undefined') {
-                data = $.parseJSON(data.firstChild.textContent);
-            }
-            GetdataFromAPI_JSON = data;
-            updateUINumber(data);
-        };
-        xdr.onerror = function (e) {
+var addRandomToDataSource = function (dataSource) {
+    return dataSource + "?random=" + Math.random();
+};
 
-        }
-        xdr.open("GET", url);
-        xdr.send();
+function SyncCurrentNum() {
+    var url_dailyNumber = configuration.fireBaseDataSources["dailyNumber"];
+    var ref = new Firebase(url_dailyNumber);
+    ref.on("value", function (snapshot) {
+        var data = snapshot.val();
+        GetdataFromAPI_JSON = data;
+        UpdateUINumber(data);
+    }, function (errorObject) {
+        console.error(errorObject);
+    });
 
-    } else {
-        //$.getJSON(url, updateUINumber);
-        $.getJSON(url, GetdataFromAPI);
-    }
+    ref.once("value", function (snap) {
+        setInterval(RefreshUINumber, 1000);
+    });
 }
 
-function updateUINumber(json) {
+//function GetCurrentNum() {
+//    var url = addRandomToDataSource(configuration.dataSources["dailyNumber"]);
+//    //not sure why need detect browser for IE.
+//    if (BrowserDetect.browser == "Explorer" && window.XDomainRequest) {
+//        var xdr = new XDomainRequest();
+//        xdr.onload = function () {
+//            var data = $.parseJSON(xdr.responseText);
+//            if (data == null || typeof (data) == 'undefined') {
+//                data = $.parseJSON(data.firstChild.textContent);
+//            }
+//            GetdataFromAPI_JSON = data;
+//            UpdateUINumber(data);
+//        };
+//        xdr.onerror = function (e) {
+
+//        }
+//        xdr.open("GET", url);
+//        xdr.send();
+
+//    } else {
+//        $.getJSON(url, GetdataFromAPI);
+//    }
+//}
+
+
+function UpdateUINumber(json) {
     var queryNumFromServer = json[0][0];
     var queryIncrement = json[0][1];
     var malwareNumFromServer = json[1][0];
@@ -58,24 +79,31 @@ function updateUINumber(json) {
 
 }
 
-
-function GetdataFromAPI(json) {
-    GetdataFromAPI_JSON = json;
-    if (typeof (GetdataFromAPI_JSON) == 'object') {
-        RefreshUINumber();
-    }
-}
+//function GetdataFromAPI(json) {
+//    GetdataFromAPI_JSON = json;
+//    if (typeof (GetdataFromAPI_JSON) == 'object') {
+//        RefreshUINumber();
+//    }
+//}
 
 function RefreshUINumber() {
     if (typeof (GetdataFromAPI_JSON) == 'object') {
-        updateUINumber(GetdataFromAPI_JSON);
+        UpdateUINumber(GetdataFromAPI_JSON);
     }
 }
 
+function UpdateDailyMars() {
+    //globalDailyMars defined in js/dailyMars.js
+    $("#appNum").html(AddCommas(globalDailyMars[0].toString()));
+    $("#virusNum").html(AddCommas(globalDailyMars[1].toString()));
+}
+
 $(function () {
-    getCurrentNum();
-    RefreshUINumber();
+    SyncCurrentNum();
+    //GetCurrentNum();  use SyncCurrentNum();
+    //RefreshUINumber();
 });
 
-setInterval(getCurrentNum, 1000 * 60); //1 minute
-setInterval(RefreshUINumber, 1000);
+setInterval(UpdateDailyMars, 1000);
+//setInterval(GetCurrentNum, 1000 * 60); //1 minute  ,  use SyncCurrentNum();
+//setInterval(RefreshUINumber, 1000);
