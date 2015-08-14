@@ -11,11 +11,20 @@
     <!-- JS Lib -->
     <script type="text/javascript" src="js/namespace.js"></script>
     <script type="text/javascript" src="js/configuration.js"></script>
-    <script type="text/javascript" src="js/jquery.js"></script>    
-    <!-- JS Init -->
-    <script type="text/javascript" src="js/map.js"></script>
-    <script type="text/javascript" src="js/dailyMars.js"></script>
-    <script type="text/javascript" src="js/pie.js"></script>
-    <script type="text/javascript" src="js/resize.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script>
+        $.each(configuration.dataSources, function (key, value) {
+            console.log(key);
+            console.log(value);
+
+            if (key !== "dots") {
+                $.getJSON(value, function (response) {
+                    debugger;
+                    var ref = new Firebase(configuration.fireBaseDataSources[key]);
+                    ref.update(response)
+                });
+            }
+        });
+    </script>
 </body>
 </html>

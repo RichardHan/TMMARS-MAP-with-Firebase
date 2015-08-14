@@ -19,7 +19,7 @@ var fireBaseDataSrouce = {
     circles: "https://mars-map.firebaseio.com/latest",
     topVirus: "https://mars-map.firebaseio.com/top-virus",
     topApp: "https://mars-map.firebaseio.com/top-app",
-    topArea: "https://mars-map.firebaseio.com/top-area",
+    //topArea: "https://mars-map.firebaseio.com/top-area",
     news: "https://mars-map.firebaseio.com/log",
     dots: "https://mars-map.firebaseio.com/base",
     dailyNumber: "https://mars-map.firebaseio.com/daily-scanned-number",
